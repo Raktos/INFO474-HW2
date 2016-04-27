@@ -1,0 +1,28 @@
+@import url(https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css);
+
+body {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+.axis line, .axis path {
+  fill: none;
+  stroke: #000;
+}
+
+.title {
+	text-anchor:middle;
+}
+
+.axis text {
+  font-size:10px;
+}
+
+.swear-bar {
+  opacity:.4;
+  fill:green;
+}
+
+.death-bar {
+  opacity:.4;
+  fill:red;
+}
