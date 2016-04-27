@@ -1,5 +1,7 @@
 # INFO 474 - Building a Data Exploration Tool
 
+## Accessible at: http://students.washington.edu/raktos/info474/data-exp-tool/
+
 I made a histogram of the swears contained in several Tarantino movies.
 
 The original version (the author from whom I got the [data](https://github.com/fivethirtyeight/data))
