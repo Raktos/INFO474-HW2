@@ -26,3 +26,7 @@ body {
   opacity:.4;
   fill:red;
 }
+
+.btn-group, .bin-size {
+  margin-top: 2em;
+}

@@ -12,6 +12,7 @@ $(function() {
 
 		// Track the sex (male, female) and drinking type (any, binge) in variables
 		var movie = 'Reservoir Dogs';
+		var type = 'Swears';
 
 		// Margin: how much space to put in the SVG for axes/titles
 		var margin = {
@@ -63,7 +64,7 @@ $(function() {
 		// Write a function for setting scales.
 		var setScales = function(data) {
             var xMax = d3.max(data, function(d){return +d.startMin}) + 2;
-            var yMax = d3.max(data, function(d){return +d.data[0].num > +d.data[1].num ? +d.data[0].num : +d.data[1].num});
+            var yMax = d3.max(data, function(d){return +d[type]});
 
 			// Define xScale
 			xScale  = d3.scale.linear().range([0, width]).domain([0,xMax]);
@@ -72,7 +73,7 @@ $(function() {
 			// Define the yScale: remember to draw from top to bottom!
 			yScale = d3.scale.linear().range([height, 0]).domain([0, yMax]);
 
-            barWidth = width / xMax * .9;
+            barWidth = width / xMax * binsize * .9;
 		};
 
 		// Function for setting axes
@@ -86,8 +87,7 @@ $(function() {
 			// Define y axis using d3.svg.axis(), assigning the scale as the yScale
 			var yAxis = d3.svg.axis()
 						.scale(yScale)
-						.orient('left')
-						.tickFormat(d3.format('.2s'));
+						.orient('left');
 
 			// Call xAxis
 			xAxisLabel.transition().duration(1500).call(xAxis);
@@ -105,17 +105,19 @@ $(function() {
             var xMax = d3.max(currData, function(d){return +d.minutes_in});
             var numBins = Math.floor(xMax / binsize) + (Math.floor(xMax) % 2) + 1;
 
+			// create histogram array
             histData = new Array(numBins);
             for (var i = 0; i < numBins; i++) {
-                histData[i] = {data: [{type: 'swear', num: 0}, {type: 'death', num: 0}], startMin: i * binsize};
+                histData[i] = {Swears: 0, Deaths: 0, startMin: i * binsize};
             }
 
+			// give distribute data to correct property
             currData.forEach(function(d) {
                 var bin = Math.floor(d.minutes_in / binsize);
                 if(d.type == 'word') {
-                    histData[bin].data[0].num++;
+                    histData[bin].Swears++;
                 } else {
-                    histData[bin].data[1].num++;
+                    histData[bin].Deaths++;
                 }
             });
 		};
@@ -127,67 +129,65 @@ $(function() {
 
 			// Set axes
 			setAxes();
-            g.selectAll('*').remove();
 
 			// Select all rects and bind data
-			var barGroups = g.selectAll('.bar-group').data(data);
-
-            barGroups.selectAll('.swear-bar').remove();
-
-            barGroups.enter().append('g')
-                .attr("transform", function(d) { return "translate(" + xScale(d.startMin) + ",0)"; })
-                .attr('height', height)
-                .attr('width', barWidth * 2)
-                .attr('class', 'bar-group');
-
-            var bars = barGroups.selectAll('rect').data(function(d) {return d.data});
+			var bars = g.selectAll('rect').data(data);
 
             bars.enter().append('rect')
-                .attr('x', function(d){return d.type == 'swear' ? barWidth * .05 : barWidth * 1.05;})
-                .attr('y', height)
-                .attr('height', 0)
-                .attr('width', barWidth)
-                .attr('class', function(d){return d.type == 'swear' ? 'swear-bar' : 'death-bar';});
+				.attr('x', width)
+				.attr('y', height)
+				.attr('height', 0)
+				.attr('width', barWidth)
+				.attr('title', function(d) {return d.startMin});
 
-            // Use the .exit() and .remove() methods to remove elements that are no longer in the data
-            barGroups.exit().remove();
-            bars.exit().remove();
+			// Use the .exit() and .remove() methods to remove elements that are no longer in the data
+			bars.exit().remove();
 
-            // Transition properties of the update selection
-            g.selectAll('rect').transition()
-                .duration(1500)
-                .delay(function(d,i){return i*10})
-                .attr('x', function(d){return d.type == 'swear' ? barWidth * .05 : barWidth * 1.05;})
-                .attr('y', function(d){return yScale(d.num); })
-                .attr('height', function(d) {return height - yScale(d.num);})
-                .attr('width', barWidth);
-
-            // bars.enter().append('rect')
-			// 	.attr('x', function(d){return xScale(d.startMin)})
-			// 	.attr('y', height)
-			// 	.attr('height', 0)
-			// 	.attr('width', barWidth)
-			//     .attr('class', 'bar')
-			// 	.attr('title', function(d) {return d.startMin});
-            //
-			// // Use the .exit() and .remove() methods to remove elements that are no longer in the data
-			// bars.exit().remove();
-            //
-			// // Transition properties of the update selection
-			// bars.transition()
-			// 	.duration(1500)
-			// 	.delay(function(d,i){return i*50})
-			// 	.attr('x', function(d){return xScale(d.startMin)})
-			// 	.attr('y', function(d){return yScale(d.swears)})
-			// 	.attr('height', function(d) {return height - yScale(d.swears)})
-			// 	.attr('width', barWidth)
-			// 	.attr('title', function(d) {return d.startMin});
+			// Transition properties of the update selection
+			bars.transition()
+				.duration(1500)
+				.delay(function(d,i){return i*5})
+				.attr('x', function(d){return xScale(d.startMin) + 0.05 * barWidth})
+				.attr('y', function(d){return yScale(d[type])})
+				.attr('height', function(d) {return height - yScale(d[type])})
+				.attr('width', barWidth)
+				.attr('class', function() {return type == 'Swears' ? 'swear-bar' : 'death-bar'})
+				.attr('title', function(d) {return d.startMin});
 		};
 
 		// Assign a change event
-		$("input").on('change', function() {
+		$(".movie").on('change', function() {
 			// Get value
 			movie = $(this).val();
+
+			$('#title').text(type + ' in ' + movie);
+
+			// Filter data, update chart
+			filterData();
+			draw(histData);
+		});
+
+		// change event for swear vs death
+		$(".type").on('change', function() {
+			// Get value
+			type = $(this).val();
+
+			$('#title').text(type + ' in ' + movie);
+
+			// Filter data, update chart
+			filterData();
+			draw(histData);
+		});
+
+		// change event for bin size
+		$(".bin-size").on('change', function() {
+			// Get value
+			var val = $(this).val();
+			if (val < 1) {
+				val = 1;
+				$(this).val(1);
+			}
+			binsize = val;
 
 			// Filter data, update chart
 			filterData();

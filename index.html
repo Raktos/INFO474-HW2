@@ -18,6 +18,7 @@
 		<script src="js/main.js"></script>
 	</head>
 	<body>
+	<div id="header" class="container">
 		<h1>Tarantino</h1>
 
 		<div class="btn-group" data-toggle="buttons">
@@ -31,6 +32,9 @@
 				<input value="Kill Bill: Vol. 1" class="movie" type="radio" name="options" autocomplete="off">Kill Bill: Vol. 1
 			</label>
 			<label class="btn btn-primary">
+				<input value="Kill Bill: Vol. 2" class="movie" type="radio" name="options" autocomplete="off">Kill Bill: Vol. 2
+			</label>
+			<label class="btn btn-primary">
 				<input value="Inglorious Basterds" class="movie" type="radio" name="options" autocomplete="off">Inglorious Basterds
 			</label>
 			<label class="btn btn-primary">
@@ -40,9 +44,28 @@
 				<input value="Jackie Brown" class="movie" type="radio" name="options" autocomplete="off">Jackie Brown
 			</label>
 		</div>
+		<br>
+		<div class="btn-group" data-toggle="buttons">
+			<label class="btn btn-primary active swear-btn">
+				<input value="Swears" class="type" type="radio" name="options" autocomplete="off">Swears
+			</label>
+			<label class="btn btn-primary death-btn">
+				<input value="Deaths" class="type" type="radio" name="options" autocomplete="off">Deaths
+			</label>
+		</div>
+		<br>
+		<label><input type="number" class="bin-size" value="2">Bin Size (in minutes)</label>
 
-		<h2>nfkjdhklfhjdkl</h2>
 
-		<div id="vis"></div>
+
+		<h2 id="title">Swears in Reservoir Dogs</h2>
+	</div>
+
+	<div id="vis"></div>
+
+	<div id="writeup" class="container">
+		<h2>Writeup</h2>
+		<p></p>
+	</div>
 	</body>
 </html>
