@@ -7,7 +7,7 @@ used a stacked bar chart version of my histogram to show both the deaths and the
 movie. I don't particularly like stacked bar charts, especially with the generally lower values of deaths
 always being at the bottom, because then the comparisons of swears needs to be a comparison of length
 instead of one of position. To solve this I attempted to create the visualization as a set of grouped
-bar charts throughout the histogram to preserve the use of position. A prototype of this version can be seen
+bar charts throughout the histogram to preserve the use of position. A (mostly broken) prototype of this version can be seen
 at thisURL/with-death-bars.html.I did not use this version because the whitespace created by having a slot
 for the death bars implied that there was no data for swears for those time sections which is not at all what
 I wanted to convey.
