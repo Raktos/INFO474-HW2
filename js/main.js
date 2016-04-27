@@ -103,7 +103,7 @@ $(function() {
 			});
 
             var xMax = d3.max(currData, function(d){return +d.minutes_in});
-            var numBins = Math.floor(xMax / binsize) + (Math.floor(xMax) % 2) + 1;
+            var numBins = Math.floor(xMax / binsize) + 1;
 
 			// create histogram array
             histData = new Array(numBins);
